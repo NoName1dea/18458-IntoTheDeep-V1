@@ -66,10 +66,9 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-32, 61, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(1, 49, Math.toRadians(-45)))
                                 //Mats are 23'23
                                 //Outtakes preload
-                               /* .lineToLinearHeading(new Pose2d(1, 33, Math.toRadians(-90)))
+                                .lineToLinearHeading(new Pose2d(1, 33, Math.toRadians(-90)))
                                 .waitSeconds(1)
                                 //Outtakes preload
                                 .lineToLinearHeading(new Pose2d(-34, 33, Math.toRadians(-90)))
@@ -84,7 +83,7 @@ public class MeepMeepTesting {
                                 .lineToLinearHeading(new Pose2d(-45, 33, Math.toRadians(270)))
                                 .waitSeconds(1)
                                 .lineToLinearHeading(new Pose2d(56, 56, Math.toRadians(50)))
-                                .waitSeconds(1)*/
+                                .waitSeconds(1)
                                 .build()
                 );
 

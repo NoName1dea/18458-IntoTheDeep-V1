@@ -2,20 +2,21 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Arm {
-    public static Servo leftArm;
-    public static Servo rightArm;
+    public final DcMotor arm;
     public final Gamepad gamepad2;
-    private static int REST = 0;  //set  later
+    private static int HIGH = 50;
+    public static int MID = 10;
     public static int INTAKE = 0;
-    public static int OUTTAKE = 0;
+
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
@@ -23,25 +24,46 @@ public class Arm {
         this.hardwareMap = opMode.hardwareMap;
         this.gamepad2 = opMode.gamepad2;
         this.telemetry = opMode.telemetry;
-        leftArm = (Servo) hardwareMap.get("leftArm");
-        rightArm = (Servo) hardwareMap.get("rightArm");
+        arm = (DcMotor) hardwareMap.get("ArmMotor");
 
         //The slides must be set to correct directions
-        leftArm.setDirection (Servo.Direction.REVERSE);
-        rightArm.setDirection (Servo.Direction.FORWARD);
-        leftArm.setPosition(REST);
-        rightArm.setPosition(REST);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //brake
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //setting power, power can vary 0-1
+        arm.setPower(0.5);
+        //
+        arm.setTargetPosition(INTAKE);
     }
     public void teleOp() {
-        if (gamepad2.a) {
-            armservo(INTAKE,INTAKE);};
-        if (gamepad2.b) {
-            armservo(OUTTAKE, OUTTAKE);}
-        if (gamepad2.x) {
-            armservo(REST, REST);}
+        if (gamepad2.dpad_up) outtake();
+        else if (gamepad2.dpad_down) intake();
+        else if (gamepad2.dpad_right) zeroPos();
+        else manual();
+
+        telemetry.addData("The right slide position in TICKS is: ", arm.getCurrentPosition());
+
     }
-    private static void armservo(double setPositionLeft, double setPositionRight){
-        rightArm.setPosition(setPositionRight);
-        leftArm.setPosition(setPositionLeft);
+    public void outtake() {
+        arm.setTargetPosition(HIGH);
+    }
+    public void intake() {
+        //Use this for high chamber
+        arm.setTargetPosition(MID);
+    }
+
+    public void zeroPos() {
+        arm.setTargetPosition(INTAKE);
+    }
+    public void manual() {
+        while (gamepad2.left_stick_y >= 0.5 && gamepad2.left_stick_y <= -0.5) {
+            arm.setPower(-gamepad2.left_stick_y);
         }
     }
+}

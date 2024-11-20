@@ -115,9 +115,11 @@ public class Drivetrain extends MecanumDrive {
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
         leftFront.setDirection(DcMotorEx.Direction.FORWARD);
-        leftRear.setDirection(DcMotorEx.Direction.FORWARD);
-        rightRear.setDirection(DcMotorEx.Direction.REVERSE);
         rightFront.setDirection(DcMotorEx.Direction.REVERSE);
+
+        //NOTE: No clue why it doesn't work
+        leftRear.setDirection(DcMotorEx.Direction.REVERSE);
+        rightRear.setDirection(DcMotorEx.Direction.FORWARD);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -327,40 +329,35 @@ public class Drivetrain extends MecanumDrive {
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
         // The equivalent button is start on Xbox-style controllers.
-        if (gamepad1.cross) {
+        if (gamepad1.cross)
             imu.resetYaw();
-        }
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_bumper)
             drivetrainTeleOp(0.5);
-        }
+
         else drivetrainTeleOp(1);
+        /*
+        rightRear 2 control hub
+        rightFront 1 control hub
+        leftRear 2 expansion
+        leftFront 1 exapnsion
+
+         */
     }
     public void drivetrainTeleOp(double number) {
-        final double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        final double x = gamepad1.left_stick_x;
-        final double rx = gamepad1.right_stick_x;
+        final double yAxisMovement = -gamepad1.left_stick_y;
+        final double xAxisMovement = gamepad1.left_stick_x;
+        final double turn = gamepad1.right_stick_x;
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double rotX = xAxisMovement * Math.cos(-botHeading) - yAxisMovement * Math.sin(-botHeading);
+        double rotY = xAxisMovement * Math.sin(-botHeading) + yAxisMovement * Math.cos(-botHeading);
+        rotX = rotX * 1.1;
+        double denominator = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(turn), 1);
 
-        // Rotate the movement direction counter to the bot's rotation
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
-
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (((rotY + rotX + rx) / denominator) * number);
-        double backLeftPower = (((rotY - rotX + rx) / denominator) * number);
-        double frontRightPower = (((rotY - rotX - rx) / denominator) * number);
-        double backRightPower = (((rotY + rotX - rx) / denominator) * number);
-
-        leftFront.setPower(frontLeftPower);
-        leftRear.setPower(backLeftPower);
-        rightFront.setPower(frontRightPower);
-        rightRear.setPower(backRightPower);
+        leftFront.setPower(((rotY + rotX+ turn)/ denominator) * number);
+        leftRear.setPower(((rotY - rotX + turn)/ denominator) * number);
+        rightFront.setPower(((rotY - rotX - turn)/ denominator) * number);
+        rightRear.setPower(((rotY + rotX - turn)/ denominator) * number);
 
     }
 }

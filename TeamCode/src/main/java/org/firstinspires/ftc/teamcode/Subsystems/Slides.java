@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -20,11 +19,7 @@ public class Slides {
     private static int HIGH = 1000;
     public static int MID = 500;
     public static int LOW = 0;
-    public static int INTAKE = 0;
-    private static double WHEEL_DIAMETER = 1.77;//in
-    private static double TICKS_PER_REV = 384.539792388;
-    private static double GEAR_RATIO = 1;
-    private static double ticks;
+    public static int RESET = 0;
 
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
@@ -46,44 +41,45 @@ public class Slides {
         //
         leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlide.setTargetPosition(0);
-        rightSlide.setTargetPosition(0);
+        leftSlide.setTargetPosition(RESET);
+        rightSlide.setTargetPosition(RESET);
 
         leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //setting power, power can vary 0-1
-        leftSlide.setPower(1);
-        rightSlide.setPower(1);
-        //
-        rightSlide.setTargetPosition(INTAKE);
-        leftSlide.setTargetPosition(INTAKE);
     }
-    public void teleOp(Gamepad controller) {
-        if (controller.dpad_up) slidesHighBasket();
-        else if (controller.dpad_right) slidesLowBasket();
-        else if (controller.dpad_left) slidesLowChamber();
-        else if (controller.dpad_down) reset();
+    public void teleOp() {
+        if (gamepad2.dpad_up) slidesHighBasket();
+        else if (gamepad2.dpad_right) slidesLowBasket();
+        else if (gamepad2.dpad_left) slidesLowChamber();
+        else if (gamepad2.dpad_down) reset();
 
-        telemetry.addData("The right slide position in TICKS is: ", rightSlide.getCurrentPosition());
-        telemetry.addData("The left slide position in TICKS is: ", leftSlide.getCurrentPosition());
+        telemetry.addData("Slide Pos", rightSlide.getCurrentPosition());
 
     }
     public void slidesHighBasket() {
         rightSlide.setTargetPosition(HIGH);
+        rightSlide.setPower(1);
         leftSlide.setTargetPosition(HIGH);
+        leftSlide.setPower(1);
     }
     public void slidesLowBasket() {
         //Use this for high chamber
         rightSlide.setTargetPosition(MID);
+        rightSlide.setPower(1);
         leftSlide.setTargetPosition(MID);
+        leftSlide.setPower(1);
     }
     public void slidesLowChamber() {
         rightSlide.setTargetPosition(LOW);
+        rightSlide.setPower(1);
         leftSlide.setTargetPosition(LOW);
+        leftSlide.setPower(1);
     }
     public void reset() {
-        rightSlide.setTargetPosition(INTAKE);
-        leftSlide.setTargetPosition(INTAKE);
+        rightSlide.setTargetPosition(RESET);
+        rightSlide.setPower(1);
+        leftSlide.setTargetPosition(RESET);
+        leftSlide.setPower(1);
 
     }
     public void slideManual(Gamepad gamepad) {

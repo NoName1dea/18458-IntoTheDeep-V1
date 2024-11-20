@@ -19,7 +19,7 @@ public class TestingTeleOp extends LinearOpMode {
         Gamepad DriverOne = gamepad1;
 
         waitForStart();
-        Arm arm = new Arm(this);
+        Claw arm = new Claw(this);
 
         while (opModeIsActive()) {
             arm.teleOp();

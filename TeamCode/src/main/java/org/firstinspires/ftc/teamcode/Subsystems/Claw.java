@@ -12,7 +12,7 @@ public class Claw {
     public final Gamepad gamepad2;
     public HardwareMap hardwareMap;
     public double OPENED = 0;
-    public double CLOSED = 0.5;
+    public double CLOSED = 0.225;
     public Claw(OpMode opMode) {
         this.hardwareMap = opMode.hardwareMap;
         this.gamepad2 = opMode.gamepad2;

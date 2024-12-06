@@ -19,12 +19,10 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(14, -61, Math.toRadians(90)))
                                 //Outtakes preload
-                                .lineToLinearHeading(new Pose2d(0, -34, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(8, -34, Math.toRadians(90)))
                                 .waitSeconds(1)
-                               .lineToLinearHeading(new Pose2d(30, -34, Math.toRadians(90)))
-                               // .waitSeconds(1)
-                              //  .lineToLinearHeading(new Pose2d(-55, -58, Math.toRadians(-130)))
-                             //   .waitSeconds(1)
+                                .lineToConstantHeading(new Vector2d(58, -59))
+                                .waitSeconds(1)
                                 .build()
                 );
 
@@ -34,11 +32,7 @@ public class MeepMeepTesting {
                 .setDimensions(17, 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-32, -61, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(0, -34, Math.toRadians(90)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(23, -34, Math.toRadians(90)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-55, -58, Math.toRadians(-130)))
+                                .lineToLinearHeading(new Pose2d(-8, -34, Math.toRadians(90)))
                                 .waitSeconds(1)
                                 .build()
                 );
@@ -50,11 +44,7 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(10, 61, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(1, 33, Math.toRadians(-90)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-34, 33, Math.toRadians(-90)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(56, 56, Math.toRadians(50)))
+                                .lineToLinearHeading(new Pose2d(8, 33, Math.toRadians(-90)))
                                 .waitSeconds(1)
                                 .build()
                 );
@@ -68,46 +58,21 @@ public class MeepMeepTesting {
                         drive.trajectorySequenceBuilder(new Pose2d(-32, 61, Math.toRadians(270)))
                                 //Mats are 23'23
                                 //Outtakes preload
-                                .lineToLinearHeading(new Pose2d(1, 33, Math.toRadians(-90)))
+                                .lineToLinearHeading(new Pose2d(-8, 33, Math.toRadians(-90)))
                                 .waitSeconds(1)
-                                //Outtakes preload
-                                .lineToLinearHeading(new Pose2d(-34, 33, Math.toRadians(-90)))
-                                .waitSeconds(1)
-                                //right
-                                .lineToLinearHeading(new Pose2d(56, 56, Math.toRadians(50)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-40, 33, Math.toRadians(270)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(56, 56, Math.toRadians(50)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-45, 33, Math.toRadians(270)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(56, 56, Math.toRadians(50)))
-                                .waitSeconds(1)
+                                .lineToConstantHeading(new Vector2d(-57, 59))
                                 .build()
                 );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
+                .addEntity(redBotLeft)
+                .addEntity(redBotRight)
                 .addEntity(blueBotRight)
+                .addEntity(blueBotLeft)
                 .start();
 
-
-
-
-        /*.lineToLinearHeading(new Pose2d(-10, 61, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-10, 35, Math.toRadians(270)))
-                .waitSeconds(10)
-                //Goes to cycle
-                .lineToLinearHeading(new Pose2d(-32, 35, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-60, 35, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(55, 35, Math.toRadians(270)))
-                .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(55, 55, Math.toRadians(0)))
-                .build()
-
-         */
     }
 
 
